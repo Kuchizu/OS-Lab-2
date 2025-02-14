@@ -157,14 +157,14 @@ static void read_block_from_disk(int real_fd, cache_block_t *block, off_t block_
 static int get_block_for_read(int fd_idx, off_t block_num) {
     int cache_idx = find_block_in_cache(fd_idx, block_num);
     if (cache_idx >= 0) {
-        g_cache[cache_idx].refbit = 1; // Доступ
+        g_cache[cache_idx].refbit = 1; // Access
         return cache_idx;
     }
 
-    // Нет в кеше — ищем жертву
+    // Not in cache ? Find victim
     cache_idx = find_victim_block();
     if (cache_idx < 0) {
-        // Теоретически не должно случиться, но проверим
+        // Maybe ?
         return -1;
     }
 
@@ -247,7 +247,7 @@ ssize_t lab2_read(int fd, void *buf, size_t count) {
             if (bytes_read_total == 0) {
                 return -1;
             }
-            break; // возвращаем то, что успели прочитать
+            break; // Return what read
         }
 
         memcpy((char *)buf + bytes_read_total,
